@@ -1,0 +1,7 @@
+#!/bin/sh
+
+location="~/tmp/dati.jpg"
+
+rm "$location"
+scrot "$location"
+feh "$location"

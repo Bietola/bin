@@ -1,0 +1,9 @@
+#!/bin/sh
+
+TO_BU=/home/dincio
+
+notify-send "BACKUP START!"
+
+restic -r /srv/restic-repo --password-file "$TO_BU"/.restic-pw --verbose --verbose backup "$TO_BU" > "$TO_BU"/tmp/home-bu.log
+
+notify-send "BACKUP DONE!"

@@ -1,0 +1,14 @@
+#!/bin/sh
+
+echo 'WARNING: the github repository "~/reps/hosts/" will be used for the update.'
+echo 'You might want to update the repository before running this script for a true update.'
+echo 'OTHER WARNING: also, a password is needed at the end...'
+
+read -n 1 -p "Proceed with udpate? [Y/n]: " ANS
+
+if [[ $ANS == "n" || $ANS == "N" ]]; then
+    exit "Aborting"
+fi
+
+# Generate file
+python3 ~/reps/hosts/updateHostsFile.py -a -r -e fakenews gambling porn social

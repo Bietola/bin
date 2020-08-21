@@ -1,0 +1,28 @@
+#!/bin/sh
+
+set -u
+
+if [[ $# -lt 3 ]]; then
+    exit "Malformed call; usage: \`notify-progress <master-command> <delta> <message-fmt> [finished-msg-fmt]\`"
+fi
+
+MASTER_COMMAND="$1"
+DELTA="$2"
+MSG="$3"
+DONE_MSG="${4-$MASTER_COMMAND is done ({delta\})!}"
+
+CUR_DELTA=0
+i=1
+while true; do
+    if [[ -z $(pgrep "$MASTER_COMMAND") ]]; then
+        echo "$DONE_MSG" | sed $(printf 's/{delta}/%s/g' "$CUR_DELTA"s) | xargs -d '\n' notify-send
+        break
+    fi
+
+    sleep $DELTA
+
+    CUR_DELTA=$((DELTA * i))
+    echo "$MSG" | sed $(printf 's/{delta}/%s/g' "$CUR_DELTA"s) | xargs -d '\n' notify-send
+
+    i=$((i + 1))
+done

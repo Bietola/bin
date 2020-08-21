@@ -1,0 +1,25 @@
+#!/bin/sh
+
+##################
+# Arguments errs #
+##################
+
+if [[ $# -gt 1 ]]; then
+    exit "Usage: terminal-prompt [PROMPT]"
+fi
+
+##########################################################
+# Write prompt to tmp file and open it in default editor #
+##########################################################
+
+PROMPT_FILE=$(mktemp -q)
+
+[[ -n "$1" ]] && echo "$1" | cat >> "$PROMPT_FILE"
+
+"$TERMINAL" &>/dev/null "$EDITOR" "$PROMPT_FILE"
+
+# Only consider last line as input
+echo "$(tail -n1 $PROMPT_FILE)"
+
+# Cleanup tmp file
+rm "$PROMPT_FILE"

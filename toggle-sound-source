@@ -1,0 +1,34 @@
+#!/bin/sh
+
+set -u
+
+HP_VOL=$(~/bin/show-vol 0 Headphone)
+SPK_VOL=$(~/bin/show-vol 0 Speaker)
+
+echo "Headphones vol: $HP_VOL"
+echo "Speakers vol: $SPK_VOL"
+
+# Unmuting all, if need be
+~/bin/unmute-all 0
+
+if [[ ($HP_VOL -gt 0 && SPK_VOL -gt 0) || ($HP_VOL -eq 0 && SPK_VOL -eq 0) ]]; then
+    echo "Both on or both off; picking speakers by default..."
+    echo "SPEAKERS ON"
+
+    amixer -q -c 0 sset Speaker 100%
+    amixer -q -c 0 sset Headphone 0%
+
+elif [[ $HP_VOL -eq 0 ]]; then
+    echo "Speakers on; picking headphones..."
+    echo "HEADPHONES ON"
+
+    amixer -q -c 0 sset Headphone "$SPK_VOL"%
+    amixer -q -c 0 sset Speaker 0%
+
+elif [[ $SPK_VOL -eq 0 ]]; then
+    echo "Heaphones on; picking speakers..."
+    echo "SPEAKERS ON"
+
+    amixer -q -c 0 sset Speaker "$HP_VOL"%
+    amixer -q -c 0 sset Headphone 0%
+fi

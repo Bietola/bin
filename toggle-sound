@@ -1,0 +1,13 @@
+#!/bin/sh
+
+ON_OR_OFF=$(amixer -c 0 sget Master | tail -n1 | cut -d' ' -f8)
+
+if [[ "$ON_OR_OFF" == "[on]" ]]; then
+    amixer -c 0 sset Master off
+    notify-send "volume muted"
+elif [[ $ON_OR_OFF == "[off]" ]]; then
+    amixer -c 0 sset Master on
+    notify-send "volume unmuted"
+else
+    notify-send "ERROR: sound is neither on, nor off" 
+fi

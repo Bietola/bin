@@ -1,0 +1,29 @@
+#!/bin/sh
+
+if [[ "$#" -lt 3 ]]; then
+    exit "Usage: concat-videos OUTPUT-FILE INPUT-FILES..."
+fi
+
+if [[ -n $(cat to-concat.txt) ]]; then
+    exit "Name designated for temp file (to-concat.txt) already exists in current path"
+fi
+
+if [[ -n $(cat "$1") ]]; then
+    exit "Output file already exists in current path."
+fi
+
+touch to-concat.txt
+
+for arg in "$@"; do
+    # Skip output file
+    if [[ "$arg" == "$1" ]]; then
+        continue
+    fi
+
+    echo "file $arg" >> to-concat.txt
+done
+
+ffmpeg -f concat -safe 0 -i to-concat.txt -c copy "$1"
+
+# Cleanup
+rm -rf to-concat.txt

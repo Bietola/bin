@@ -1,0 +1,5 @@
+#!/bin/sh
+
+notify-progress ~/bin/bu-home 30 \
+    "Doing daily backup ({delta})" \
+    "Daily backup done! ({delta})"

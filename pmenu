@@ -1,0 +1,33 @@
+#!/bin/sh
+
+usage_1="Usage 1: pmenu WANTED_CREDENTIAL_INFO [DMENU_ARGS...]"
+usage_2="Usage 2: pmenu list-credentials"
+usage="$usage1\n$usage2"
+
+shopt -s nullglob globstar
+
+field="${1:?$usage}"; shift
+
+prefix=${PASSWORD_STORE_DIR-~/.password-store}
+password_files=( "$prefix"/**/*.gpg )
+password_files=( "${password_files[@]#"$prefix"/}" )
+password_files=( "${password_files[@]%.gpg}" )
+
+password=$(printf '%s\n' "${password_files[@]}" | dmenu "$@")
+
+if [[ "$field" == "list-credentials" ]]; then
+    # TODO: refine output
+    notify-send "$(pass show "$password")"
+
+    exit 0
+fi
+
+[[ -n $password ]] || exit
+
+if [[ "$field" == "pw" ]]; then
+    pass show "$password" | head -n1 | xclip -selection clipboard
+else
+    field_val=$(pass show "$password" | grep "^$field:")
+    [[ -z "$field_val" ]] && { echo "$field does not exist for $password"; exit 1; }
+    echo "$field_val" | cut -d' ' -f2 | xclip -selection clipboard
+fi

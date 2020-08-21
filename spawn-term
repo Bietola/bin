@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [[ "$TERMINAL" =~ "alacritty" ]]; then
+    "$TERMINAL" -e "$@"
+else
+    # Terminals for which this works:
+    # - st
+
+    "$TERMINAL" "$@"
+fi
