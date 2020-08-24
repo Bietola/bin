@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# Uses the restic repo spcified in RESTIC_REPOSITORY
+restic --exclude={/dev,/media,/mnt,/proc,/run,/sys,/tmp,/var/tmp} backup /

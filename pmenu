@@ -1,26 +1,39 @@
 #!/bin/sh
 
+# Usage info
 usage_1="Usage 1: pmenu WANTED_CREDENTIAL_INFO [DMENU_ARGS...]"
 usage_2="Usage 2: pmenu list-credentials"
-usage="$usage1\n$usage2"
+usage="$usage_1\n$usage_2"
 
+# To keep things clean
 shopt -s nullglob globstar
 
-field="${1:?$usage}"; shift
+# Get optional subcommand
+subcommand="${1:-nothing}"
 
+# Get name for wanted pass entry (inside $password)
 prefix=${PASSWORD_STORE_DIR-~/.password-store}
 password_files=( "$prefix"/**/*.gpg )
 password_files=( "${password_files[@]#"$prefix"/}" )
 password_files=( "${password_files[@]%.gpg}" )
 
-password=$(printf '%s\n' "${password_files[@]}" | dmenu "$@")
+password=$(printf '%s\n' "${password_files[@]}" | dmenu)
 
-if [[ "$field" == "list-credentials" ]]; then
+# "list-credentials" subcommand just lists the available credentials associated to the chosen pass entry
+if [[ $subcommand == "list-credentials" ]]; then
     # TODO: refine output
     notify-send "$(pass show "$password")"
 
     exit 0
+elif [[ $subcommand != "nothing" ]]; then
+    echo -e "$usage"
+
+    exit 1
 fi
+
+# Get wanted credential field for chosen entry
+available_fields="pw\n$(~/bin/get-credentials $password)"
+field=$(echo -e "$available_fields" | dmenu -p "field: ")
 
 [[ -n $password ]] || exit
 
