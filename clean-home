@@ -1,0 +1,3 @@
+#!/bin/sh
+
+rm -r Downloads/ Pictures/ Videos/ Templates/ Public/ Music/ Documents/
