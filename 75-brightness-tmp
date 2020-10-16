@@ -1,0 +1,3 @@
+#!/bin/sh
+
+echo 18000 > /sys/class/backlight/intel_backlight/brightness
