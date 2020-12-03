@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# Actually mount sd
+mount -o umount=0 /dev/sdb1 /sd
+
+# Check that it is the sd
+# Warning: not foolproof way
+if [[ ! -e '/sd/System Volume Information' ]]; then
+    echo "No \"System Volume Information\" file found inside of mounted directory (/sd)"
+    echo "Something went wrong with mount; aborting..."
+    exit 1
+fi
+
+# Activate syncthing
+# TODO: do this
