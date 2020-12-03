@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# File to which all errors must be written to
+ERR_FILE=/tmp/err
+
+# For error checking
+checkerr() {
+    ERR="$(cat $ERR_FILE)"
+
+    if [[ -n $ERR ]]; then
+        echo "Aborting add-xrandr-resolution; reason: $ERR"
+        exit 1
+    fi
+}
+
+err() {
+    echo "args: $@"
+    echo "hello"
+
+    $@ 2>$ERR_FILE
+
+    ERR="$(cat $ERR_FILE)"
+    if [[ -n $ERR ]]; then
+        echo "Aborting add-xrandr-resolution; reason: $ERR"
+        exit 1
+    fi
+}

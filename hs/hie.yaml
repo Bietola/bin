@@ -1,0 +1,5 @@
+# NB. This
+cradle:
+  stack:
+    - path: "."
+      component: "core.hs"

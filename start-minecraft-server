@@ -1,0 +1,3 @@
+#!/bin/sh
+
+spawn-term { echo "hello"; echo "there" }

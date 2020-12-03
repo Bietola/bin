@@ -1,20 +1,20 @@
 #!/bin/sh
 
-# For `err` and `ERR_FILE`
-source ~/bin/err-utils
-
 # Usage
-if [[ $# != 1 ]]; then
+if [[ $# != 2 ]]; then
     echo "Usage: add-xrandr-resolution RES_WDITH RES_HEIGHT"
     exit 1
 fi
 
-{ err cvt $1 $2; } | head -n1
-
-exit 1
+# Empty error file to be sure
+rm $ERR_FILE
 
 # cvt creates xrandr mode info from a given resolution
-err cvt $1 $2 |
+MODE_DESC=$(cvt $1 $2 2>/tmp/err)
+
+ERR=$(cat /tmp/err)
+[[ -n $(cat /tmp/err) ]] && { echo "Aborting add-xrandr-resolution; reason: $ERR"; exit }
+
     # Extract xrandr mode info
     tail -n1 | cut -d' ' -f2- |
     # Create new xrandr mode (lasts for one session)
