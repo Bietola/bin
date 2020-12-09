@@ -1,4 +1,6 @@
 #!/usr/bin/env stack
 {- stack script
- --resolver lts-10.2
+ --optimize
+ --resolver lts-14.2
+ --package turtle
 -}

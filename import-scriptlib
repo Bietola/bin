@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# TODO: Never tested...
+# TODO: Use ´version´ flag
+
+####################################################
+# Check if needed "script libraries" are available #
+####################################################
+
+REQUIRED_SCRIPTLIB_VERSION="73e35f2"
+SCRIPTLIB_FOLDER="$HOME/bin"
+SCRIPTLIB_REP="www.github.com/Bietola/bin"
+
+if [[ ! -d $SCRIPTLIB_FOLDER ]]; then
+    echo "Error: missing scriptlib directory (should be at $SCRIPTLIB_FOLDER)."
+    echo "Clone it from $SCRIPTLIB_REP."
+    exit 1
+fi
+
+CURRENT_BIN_VERSION=$(git --git-dir $SCRIPTLIB_FOLDER/.git rev-parse --short HEAD)
+
+if [[ $REQUIRED_BIN_VERSION !=  $CURRENT_BIN_VERSION ]]; then
+    echo "Error: wrong scriptlib commit."
+    echo "Required commit: $REQUIRED_SCRIPTLIB_VERSION."
+    echo "Clone it from $SCRIPTLIB_REP."
+    exit 1
+else
+    echo "Sciptlib imported without problems."
+fi
+

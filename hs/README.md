@@ -1,3 +1,5 @@
+WARNING: Process below still needs to be tested with the new directory-per-script paradigm.
+
 To add a new script:
 
 1. Copy the `stack` shebang header from the `core.hs` file
