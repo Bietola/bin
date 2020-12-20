@@ -1,0 +1,34 @@
+#!/bin/sh
+
+# Parse args
+
+USAGE="Usage: mkscript NEW_SCRIPT_FOLDER"
+
+[[ $# -ne 1 ]] && (echo "$USAGE"; exit 1;)
+
+SCRIPT_FOLDER="$1"
+SCRIPT="$SCRIPT_FOLDER/$SCRIPT_FOLDER.hs"
+
+if [[ -e "$SCRIPT_FOLDER" ]]; then
+    echo "File/folder/thingy already present at $SCRIPT_FOLDER."
+    echo "Please remove it."
+    exit 1
+fi
+
+# Do it
+
+HS_BANNER="$(cat <<EOF
+#!/usr/bin/env stack
+{- stack script
+ --optimize
+ --resolver lts-14.2
+ --package turtle
+-}
+EOF
+)"
+
+mkdir "$SCRIPT_FOLDER"
+
+cat <<EOF >>"$SCRIPT"
+$HS_BANNER
+EOF
