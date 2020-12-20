@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Actually mount sd
-mount -o umount=0 /dev/sdb1 /sd
+mount -o umask=0 /dev/sdb1 /sd
 
 # Check that it is the sd
 # Warning: not foolproof way
